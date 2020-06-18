@@ -1,4 +1,4 @@
-package com.boot.my.MyProject.Admin;
+package com.boot.my.thumbsup.domains.Admin.domain;
 
 public class AdminDto {
 
@@ -32,6 +32,8 @@ public class AdminDto {
     private String adminGrant;
     // 마지막 접속일 
     private String adminAccessdate;
+    // token
+    private String adminToken;
 
 	public Long getAdmin_idx() {
 		return admin_idx;
@@ -168,6 +170,15 @@ public class AdminDto {
 	public void setAdminAccessdate(String adminAccessdate) {
 		this.adminAccessdate = adminAccessdate;
 	}
+	
+	public String getAdminToken() {
+		return adminToken;
+	}
+
+	public void setAdminToken(String adminToken) {
+		this.adminToken = adminToken;
+	}
+
 	public Admin toEntity() {
 		return new Admin(
 				admin_idx,
@@ -186,7 +197,8 @@ public class AdminDto {
 				adminRegdate,
 				adminUpddate,
 				adminGrant,
-				adminAccessdate
+				adminAccessdate,
+				adminToken
 				);
 	}
 

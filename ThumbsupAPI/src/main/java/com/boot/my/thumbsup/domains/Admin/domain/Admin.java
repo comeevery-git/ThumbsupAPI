@@ -1,4 +1,4 @@
-package com.boot.my.MyProject.Admin;
+package com.boot.my.thumbsup.domains.Admin.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "tu_admin")
+@Table(name = "tb_admin")
 public class Admin {
  
 	public Admin() {}
@@ -17,7 +17,7 @@ public class Admin {
 	public Admin(Long admin_idx, String adminType, String adminDepart, String adminRank, String adminId,
 			String adminPwd, String adminNm, String adminTel, String adminRrno, String adminGender, Integer adminImg,
 			String adminUseyn, String adminDelyn, String adminRegdate, String adminUpddate, String adminGrant,
-			String adminAccessdate) {
+			String adminAccessdate, String adminToken) {
 		super();
 		this.admin_idx = admin_idx;
 		this.adminType = adminType;
@@ -36,6 +36,7 @@ public class Admin {
 		this.adminUpddate = adminUpddate;
 		this.adminGrant = adminGrant;
 		this.adminAccessdate = adminAccessdate;
+		this.adminToken = adminToken;
 		
 	}
 
@@ -106,6 +107,9 @@ public class Admin {
     // 마지막 접속일 
     private String adminAccessdate;
 
+    // token
+    private String adminToken;
+    
 	public Long getAdmin_idx() {
 		return admin_idx;
 	}
@@ -242,6 +246,13 @@ public class Admin {
 		this.adminAccessdate = adminAccessdate;
 	}
 
+	public String getAdminToken() {
+		return adminToken;
+	}
+
+	public void setAdminToken(String adminToken) {
+		this.adminToken = adminToken;
+	}
 
 	@Override
 	public String toString() {
@@ -251,6 +262,7 @@ public class Admin {
 				+ ", adminImg=" + adminImg + ", adminUseyn=" + adminUseyn + ", adminDelyn=" + adminDelyn
 				+ ", adminRegdate=" + adminRegdate + ", adminUpddate=" + adminUpddate + ", adminGrant=" + adminGrant
 				+ ", adminAccessdate=" + adminAccessdate
+				+ ", adminToken=" + adminToken
 				+ "]";
 	}
 

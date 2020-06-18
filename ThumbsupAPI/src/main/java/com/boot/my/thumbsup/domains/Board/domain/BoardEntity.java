@@ -1,4 +1,4 @@
-package com.boot.my.MyProject.Board;
+package com.boot.my.thumbsup.domains.Board.domain;
 
 import java.io.Serializable;
 
@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tu_board")
+@Table(name = "tb_board")
 public class BoardEntity implements Serializable {
 	
 	//기본 생성자 필수

@@ -1,6 +1,6 @@
-package com.boot.my.MyProject.Board;
+package com.boot.my.thumbsup.domains.Board.service;
 
-import java.util.List;
+import com.boot.my.thumbsup.domains.Board.domain.BoardEntity;
 
 public interface BoardService {
 	/*

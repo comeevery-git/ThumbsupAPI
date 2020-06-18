@@ -1,4 +1,4 @@
-package com.boot.my.MyProject.Common;
+package com.boot.my.thumbsup.Common;
 
 import org.springframework.http.HttpStatus;
 public class RestException extends RuntimeException {

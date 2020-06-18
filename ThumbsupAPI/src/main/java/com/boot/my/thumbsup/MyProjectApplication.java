@@ -1,4 +1,4 @@
-package com.boot.my.MyProject;
+package com.boot.my.thumbsup;
 
 import java.nio.charset.Charset;
 

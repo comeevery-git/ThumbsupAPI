@@ -1,4 +1,4 @@
-package com.boot.my.MyProject.Common;
+package com.boot.my.thumbsup.Common;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,8 +6,6 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.boot.my.MyProject.Common.RestException;
 
 @RestControllerAdvice
 public class ControllerAdvice {
