@@ -1,0 +1,50 @@
+/* This css file is to over write bootstarp css
+--------------------------------------------------------- /
+* Theme Name: Ela Admin Template
+* Theme URI: http://demos.jeweltheme.com/
+* Author: jewel_theme
+* Author URI: http://themeforest.net/user/jewel_theme/portfolio
+* Description:
+* Version: 1.0.0
+* License: GNU General Public License v2 or later
+* License URI: http://www.gnu.org/licenses/gpl-2.0.html
+* Tags: html, themplate, Ela Admin
+--------------------------------------------------------- */
+/* input 디자인 */
+.form-control {
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #ccc;
+    font-size: 1rem;
+}
+.form-control:focus {
+    outline: none;
+    border-color: #333;
+    box-shadow: none;
+    font-size: 1.2rem;
+}
+
+/* 영어 폰트*/
+.form-group {
+	font-family: 'Black Han Sans', sans-serif;
+}
+/* 한글 폰트 */
+#doFont {
+	font-family: 'Nanum Gothic Coding', monospace;
+	font-weight: bold;
+}
+
+/* sweet alert 타이틀 폰트 */
+.swal-title {
+}
+/* sweet alert 큰 폰트 */
+.swal-text {
+  font-family: 'Nanum Gothic Coding', monospace;
+  font-weight: bold;
+}
+/* sweet alert 작은 폰트 */
+.swal-footer {
+  font-family: 'Nanum Gothic Coding', monospace;
+  font-weight: bold;
+}
+
