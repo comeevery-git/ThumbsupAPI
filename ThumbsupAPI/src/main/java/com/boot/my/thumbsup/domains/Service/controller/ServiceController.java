@@ -3,7 +3,6 @@ package com.boot.my.thumbsup.domains.Service.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,12 +17,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.boot.my.thumbsup.Common.Service.JwtService;
 import com.boot.my.thumbsup.domains.Admin.domain.AdminRepository;
 import com.boot.my.thumbsup.domains.Admin.service.AdminService;
+import com.boot.my.thumbsup.domains.Member.domain.Member;
+import com.boot.my.thumbsup.domains.Member.domain.MemberRepository;
 import com.boot.my.thumbsup.domains.Service.service.ServiceService;
 
 @Controller
@@ -41,10 +44,12 @@ public class ServiceController {
 	@Autowired
 	private AdminRepository adminRepository;
 	@Autowired
+	private MemberRepository memberRepository;
+	@Autowired
 	JwtService jwtService;
 	
 	/*
-	 * 직원 로그인 -- 직원인증 후 토큰생성, 토큰리턴
+	 * 로그인 -- BackOffice / Web 로그인 정보 확인 후 토큰생성, 토큰리턴
 	 */
     @RequestMapping("/auth")
     public ResponseEntity<String> auth(
@@ -53,7 +58,7 @@ public class ServiceController {
             HttpServletResponse response,
             Authentication auth
             ) {
-    	System.out.println("API Server --- tuLogin");
+    	System.out.println("API Server --- auth");
     	System.out.println("API Server --- getName   :::::   "+map.getClass().getName());
     	System.out.println("API Server --- getTypeName   :::::   "+map.getClass().getTypeName());
     	String user_auth = "";
@@ -118,5 +123,56 @@ public class ServiceController {
     	*/
     }
     
-
+	/*
+	 * 회원가입 -- Web
+	 */
+    @RequestMapping("/register")
+    public ResponseEntity<String> register(
+    		@RequestBody MultiValueMap<String, String> map,
+    		@Validated Member member,
+    		HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication auth
+            ) {
+    	System.out.println("API Server --- register");
+    	System.out.println("API Server --- getName   :::::   "+map.getClass().getName());
+    	System.out.println("API Server --- getTypeName   :::::   "+map.getClass().getTypeName());
+    	String registerResult = "";
+    	
+    	System.out.println("API Server --- map   :::::   "+map);
+    	System.out.println("API Server --- map.id   :::::   "+map.get("id"));
+    	System.out.println("API Server --- map.pwd   :::::   "+map.get("pwd"));
+    	System.out.println("API Server --- map.name   :::::   "+map.get("name"));
+    	System.out.println("API Server --- map.rrno   :::::   "+map.get("rrno"));
+    	System.out.println("API Server --- map.gender   :::::   "+map.get("gender"));
+    	String id = serviceService.strSplitData(map.get("id").toString());
+    	String pwd = serviceService.strSplitData(map.get("pwd").toString());
+    	String name = serviceService.strSplitData(map.get("name").toString());
+    	String rrno = serviceService.strSplitData(map.get("rrno").toString());
+    	String gender = serviceService.strSplitData(map.get("gender").toString());
+    	System.out.println("@@@@@@@@@@@id : "+id);
+    	
+    	try {
+    		member.setMbId(id);
+        	String encodePassword = passwordEncoder.encode(pwd);
+        	member.setMbPwd(encodePassword);
+        	member.setMbNm(name);
+        	member.setMbRrno(rrno);
+        	member.setMbGender(gender);
+        	String localDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        	
+        	member.setMbRegdate(localDate);
+     	    memberRepository.save(member);
+     	    registerResult = "success";
+	        return new ResponseEntity<String>(registerResult, HttpStatus.OK); 
+	        
+    	} catch(Exception e) {
+    		registerResult = "error";
+    		return new ResponseEntity<String>(registerResult, HttpStatus.OK);
+    	}
+    	
+    }
+    
+    
+    
 }
