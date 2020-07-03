@@ -76,11 +76,13 @@
 			<artifactId>mariadb-java-client</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-        <dependency>
-               <groupId>org.projectlombok</groupId>
-               <artifactId>lombok</artifactId>
-               <optional>true</optional>
-        </dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId> 
+			<optional>true</optional>
+			<scope>provided</scope>
+		</dependency>
+
         
         <!-- Query console 표시 -->
         <dependency>
@@ -120,14 +122,39 @@
 	        <artifactId>jjwt</artifactId>
 	        <version>0.9.1</version>
 		</dependency>
-		
 		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
 		<dependency>
 		    <groupId>org.jsoup</groupId>
 		    <artifactId>jsoup</artifactId>
 		    <version>1.11.3</version>
 		</dependency>
-				
+		<!-- Swegger : API 문서화 툴 -->
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>2.7.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>2.7.0</version>
+		</dependency>
+
+		<!-- i18n -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version><!--$NO-MVN-MAN-VER$-->
+		</dependency>
+
+		<!-- Message Yaml -->
+		<!-- https://mvnrepository.com/artifact/net.rakugakibox.util/yaml-resource-bundle -->
+		<dependency>
+		  <groupId>net.rakugakibox.util</groupId>
+		  <artifactId>yaml-resource-bundle</artifactId>
+		  <version>1.1</version>
+		</dependency>
+    
 	</dependencies>
 
 
