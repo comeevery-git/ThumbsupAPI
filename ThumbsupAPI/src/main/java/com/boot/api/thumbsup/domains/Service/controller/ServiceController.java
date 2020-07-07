@@ -1,3 +1,4 @@
+/*
 package com.boot.api.thumbsup.domains.Service.controller;
 
 
@@ -44,7 +45,7 @@ public class ServiceController {
 	
 	/*
 	 * 로그인 -- BackOffice / Web 로그인 정보 확인 후 토큰생성, 토큰리턴
-	 */
+	 
     @RequestMapping("/auth")
     public ResponseEntity<String> auth(
     		@RequestBody MultiValueMap<String, String> map,
@@ -74,7 +75,7 @@ public class ServiceController {
     		 * jwtService.get("TUK"); System.out.println("------------------------------");
     		 * System.out.println(value);
     		 * System.out.println("------------------------------");
-    		 */
+    		 
         	if(user_auth.equals("[ROLE_ADMIN]")) {
         		
             	
@@ -114,7 +115,7 @@ public class ServiceController {
     		msg = "else1";
     		return msg;
     	}
-    	*/
+    	
     }
     
 	/*
@@ -164,8 +165,9 @@ public class ServiceController {
     		return new ResponseEntity<String>(registerResult, HttpStatus.OK);
     	}
     	
-    } */
+    }
     
     
     
 }
+*/

@@ -20,6 +20,8 @@ import com.boot.api.thumbsup.domains.member.domain.Member;
 import com.boot.api.thumbsup.domains.member.domain.MemberJpaRepo;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,9 @@ public class MemberController {
     private final MemberJpaRepo memberJpaRepo;
     private final ResponseService responseService; // 결과를 처리할 Service
     
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 리스트 조회", notes = "모든 회원을 조회한다")
     @GetMapping(value = "/users")
     public ListResult<Member> findAllUser() {
@@ -49,8 +54,11 @@ public class MemberController {
         return responseService.getListResult(memberJpaRepo.findAll());
     }
     
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 단건 조회", notes = "userId로 회원을 조회한다")
-    @GetMapping(value = "/user/{msrl}")
+    @GetMapping(value = "/user/{mbIdx}")
     public SingleResult<Member> findUserById(
 		    		@ApiParam(value = "회원ID", required = true) @PathVariable int mbIdx
 	    		) {
@@ -59,6 +67,9 @@ public class MemberController {
         return responseService.getSingleResult(memberJpaRepo.findById(mbIdx).orElseThrow(CMemberNotFoundException::new));
     }
     
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 입력", notes = "회원을 입력한다")
     @PostMapping(value = "/user")
     public SingleResult<Member> save(
@@ -67,7 +78,6 @@ public class MemberController {
                     @ApiParam(value = "회원비밀번호", required = true) @RequestParam String mbPwd,
                     @ApiParam(value = "회원생년월일", required = true) @RequestParam String mbRrno,
                     @ApiParam(value = "회원성별", required = true) @RequestParam String mbGender,
-                    @ApiParam(value = "회원타입", defaultValue= "USER") @RequestParam String mbType,
                     @ApiParam(value = "회원삭제여부", defaultValue= "N") @RequestParam String mbDelyn
                ) {
     	
@@ -83,7 +93,6 @@ public class MemberController {
                 .mbPwd(mbPwd)
                 .mbRrno(mbRrno)
                 .mbGender(mbGender)
-                .mbType(mbType)
                 .mbRegdate(mbRegdate)
                 .mbUpddate(mbUpddate)
                 .mbDelyn(mbDelyn)
@@ -93,6 +102,9 @@ public class MemberController {
         
     }
     
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 수정", notes = "회원정보를 수정한다")
     @PutMapping(value = "/user")
     public SingleResult<Member> modify(
@@ -108,8 +120,11 @@ public class MemberController {
         return responseService.getSingleResult(memberJpaRepo.save(member));
     }
     
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 삭제", notes = "userId로 회원정보를 삭제한다")
-    @DeleteMapping(value = "/user/{msrl}")
+    @DeleteMapping(value = "/user/{mbIdx}")
     public CommonResult delete(
             		@ApiParam(value = "회원번호", required = true) @PathVariable int mbIdx
             	) {

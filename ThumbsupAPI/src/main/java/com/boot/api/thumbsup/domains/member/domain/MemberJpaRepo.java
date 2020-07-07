@@ -3,6 +3,7 @@ package com.boot.api.thumbsup.domains.member.domain;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 
 //하나의 테이블이라고 생각하면 편함
 //CrudRepository 인터페이스를 상속받아
@@ -10,4 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 //두번째는 User테이블의 기본키 타입을 넣는다.
 public interface MemberJpaRepo extends JpaRepository<Member, Integer> {
     Optional<Member> findByMbId(String mbId);
+
+
 }

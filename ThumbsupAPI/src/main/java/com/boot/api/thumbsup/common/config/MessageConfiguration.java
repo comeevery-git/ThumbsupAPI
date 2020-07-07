@@ -1,21 +1,7 @@
 package com.boot.api.thumbsup.common.config;
 
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties.LocaleResolver;
-import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
-import net.rakugakibox.util.YamlResourceBundle;
 
 /*
  *
@@ -29,9 +15,11 @@ FixedLocaleResolver
 SessionLocaleResolver
 	
  */
+
 @Configuration
 public class MessageConfiguration implements WebMvcConfigurer {
-	/* test중 ksh
+
+	/* test중 ksh 
     @Bean // 세션에 지역설정. default는 KOREAN = 'ko'
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
@@ -72,6 +60,7 @@ public class MessageConfiguration implements WebMvcConfigurer {
         protected ResourceBundle doGetBundle(String basename, Locale locale) throws MissingResourceException {
             return ResourceBundle.getBundle(basename, locale, YamlResourceBundle.Control.INSTANCE);
         }
-    }*/
+    }
+   */
     
 }

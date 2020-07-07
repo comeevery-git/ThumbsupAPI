@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.boot.api.thumbsup.common.exception.CEmailSigninFailedException;
 import com.boot.api.thumbsup.common.exception.CMemberNotFoundException;
 import com.boot.api.thumbsup.common.model.CommonResult;
 import com.boot.api.thumbsup.common.service.ResponseService;
@@ -28,7 +29,7 @@ ex) @RestControllerAdvice(basePackages = “com.rest.api”)
 실습에서는 아무것도 적용하지 않아 프로젝트의 모든 Controller에 로직이 적용됩니다.
  */
 public class ExceptionAdvice {
-	
+
     private final ResponseService responseService;
     
     @ExceptionHandler(Exception.class) 
@@ -46,6 +47,9 @@ public class ExceptionAdvice {
      */
     protected CommonResult defaultException(HttpServletRequest request, Exception e) {
         return responseService.getFailResult();
+        //ExceptionAdvice의 에러 메시지를 messageSource 내용으로 교체
+    	// return responseService.getFailResult(Integer.valueOf(getMessage("unKnown.code")), getMessage("unKnown.msg"));
+    	
         /*
          * Exception 발생시 이미 만들어둔 CommonResult의 실패 결과를 json 형태로 출력하도록 설정합니다.
          * 위에서 세팅한 HttpStatus Code외에 추가로 api 성공 실패여부를 다시 세팅하는 이유는 상황에 따라 다양한 메시지를 전달하기 위해서 입니다.
@@ -60,10 +64,32 @@ public class ExceptionAdvice {
     @ExceptionHandler(CMemberNotFoundException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected CommonResult userNotFoundException(HttpServletRequest request, CMemberNotFoundException e) {
-        return responseService.getFailResult();
+    	return responseService.getFailResult();
+    	//예외 처리의 메시지를 MessageSource에서 가져오도록 수정
+    	// return responseService.getFailResult(Integer.valueOf(getMessage("userNotFound.code")), getMessage("userNotFound.msg"));
+    	
+    }
+    //이메일 로그인 Exception
+    @ExceptionHandler(CEmailSigninFailedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected CommonResult emailSigninFailed(HttpServletRequest request, CEmailSigninFailedException e) {
+		return responseService.getFailResult();
+        // return responseService.getFailResult(Integer.valueOf(getMessage("emailSigninFailed.code")), getMessage("emailSigninFailed.msg"));
     }
     
     
+    // code정보에 해당하는 메시지를 조회합니다.
+    private String getMessage(String code) {
+        return getMessage(code, null);
+    }
     
+    // code정보, 추가 argument로 현재 locale에 맞는 메시지를 조회합니다.
+    private String getMessage(String code, Object[] args) {
+        //return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
+    	/* 테스트 중
+    	return messageConfiguration.messageSource(code, LocaleContextHolder.getLocale());
+    	*/
+    	return "test";
+    }
     
 }

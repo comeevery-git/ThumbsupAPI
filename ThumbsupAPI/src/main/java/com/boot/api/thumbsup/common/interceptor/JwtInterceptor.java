@@ -1,3 +1,4 @@
+/*
 package com.boot.api.thumbsup.common.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,3 +34,4 @@ public class JwtInterceptor implements HandlerInterceptor {
 	
 	
 }
+*/

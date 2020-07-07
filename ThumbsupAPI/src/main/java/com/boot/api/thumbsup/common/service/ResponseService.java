@@ -57,11 +57,15 @@ public class ResponseService {
     }
     
     // 실패 결과만 처리하는 메소드
+    //ResponseService의 getFailResult 메소드가 code, msg를 받을수 있도록 수정
     public CommonResult getFailResult() {
+    //public CommonResult getFailResult(int code, String msg) {
         CommonResult result = new CommonResult();
         result.setSuccess(false);
         result.setCode(CommonResponse.FAIL.getCode());
         result.setMsg(CommonResponse.FAIL.getMsg());
+        //result.setCode(code);
+        //result.setMsg(msg);
         return result;
     }
     
