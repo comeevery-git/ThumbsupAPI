@@ -1,8 +1,8 @@
-package com.boot.api.thumbsup.domains.Admin.service;
+package com.boot.api.thumbsup.domains.admin.service;
 
 import org.springframework.stereotype.Service;
 
-import com.boot.api.thumbsup.domains.Admin.domain.AdminRepository;
+import com.boot.api.thumbsup.domains.admin.domain.AdminRepository;
 
 import lombok.AllArgsConstructor;
 

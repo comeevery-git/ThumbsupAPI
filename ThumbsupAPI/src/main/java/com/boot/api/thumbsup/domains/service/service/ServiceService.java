@@ -1,5 +1,5 @@
 /*
-package com.boot.api.thumbsup.domains.Service.service;
+package com.boot.api.thumbsup.domains.service.service;
 
 import org.springframework.stereotype.Service;
 

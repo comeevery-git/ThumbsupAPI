@@ -1,4 +1,4 @@
-package com.boot.api.thumbsup.domains.Admin.domain;
+package com.boot.api.thumbsup.domains.admin.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,5 +1,5 @@
 /*
-package com.boot.api.thumbsup.domains.Service.controller;
+package com.boot.api.thumbsup.domains.service.controller;
 
 
 import javax.servlet.http.HttpServletRequest;

@@ -1,10 +1,10 @@
-package com.boot.api.thumbsup.domains.Board.service;
+package com.boot.api.thumbsup.domains.board.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boot.api.thumbsup.domains.Board.domain.BoardEntity;
-import com.boot.api.thumbsup.domains.Board.domain.BoardRepository;
+import com.boot.api.thumbsup.domains.board.domain.BoardEntity;
+import com.boot.api.thumbsup.domains.board.domain.BoardRepository;
 
 @Service
 public class BoardServiceImpl implements BoardService {

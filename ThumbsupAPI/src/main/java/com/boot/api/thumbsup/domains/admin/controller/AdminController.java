@@ -1,4 +1,4 @@
-package com.boot.api.thumbsup.domains.Admin.controller;
+package com.boot.api.thumbsup.domains.admin.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,8 +6,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.boot.api.thumbsup.domains.Admin.domain.AdminRepository;
-import com.boot.api.thumbsup.domains.Admin.service.AdminService;
+import com.boot.api.thumbsup.domains.admin.domain.AdminRepository;
+import com.boot.api.thumbsup.domains.admin.service.AdminService;
 
 @Controller
 @RequestMapping("/admin")

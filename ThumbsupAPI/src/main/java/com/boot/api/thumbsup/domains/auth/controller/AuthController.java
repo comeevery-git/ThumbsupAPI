@@ -1,4 +1,4 @@
-package com.boot.api.thumbsup.domains.Auth.controller;
+package com.boot.api.thumbsup.domains.auth.controller;
 
 
 import java.text.SimpleDateFormat;
@@ -113,6 +113,79 @@ public class AuthController {
     	return responseService.getSuccessResult();
    }
 
+    
+    /*
+	 * 직원 로그인
+	 */
+    @ApiOperation(value = "직원 로그인", notes = "이메일 로그인을 한다.")
+    @PostMapping(value = "/signin_m")
+    public SingleResult<String> signin_m(
+    		@ApiParam(value = "ID : 이메일", required = true) @RequestParam String mbId,
+           @ApiParam(value = "비밀번호", required = true) @RequestParam String mbPwd
+           ) {
+    	try {
+	        Member member = memberJpaRepo.findByMbId(mbId).orElseThrow(CEmailSigninFailedException::new);
+	        
+	        if (!passwordEncoder.matches(mbPwd, member.getPassword())) throw new CEmailSigninFailedException();
+	        return responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(member.getMbId()), member.getRoles()));
+	        
+    	} catch (Exception e) {
+    		System.out.println(e);
+    	}
+    	
+    	return responseService.getSingleResult("LOGIN ERROR : 암호화 확인필요");
+    }
+    
+	/*
+	 * 직원가입
+	 */
+    @ApiOperation(value = "직원가입", notes = "회원가입을 한다.")
+    @PostMapping(value = "/signup_m")
+    public CommonResult signup_m(
+    		@ApiParam(value = "회원아이디", required = true) @RequestParam String mbId,
+    	    @ApiParam(value = "회원이름", required = true) @RequestParam String mbNm,
+    	    @ApiParam(value = "회원비밀번호", required = true) @RequestParam String mbPwd,
+    	    @ApiParam(value = "회원생년월일", required = true) @RequestParam String mbRrno,
+    	    @ApiParam(value = "회원성별", required = true) @RequestParam String mbGender,
+    	    @ApiParam(value = "회원삭제여부", defaultValue= "N") @RequestParam String mbDelyn
+    		) {
+    	try {
+		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+		String date = format.format (System.currentTimeMillis());
+		System.out.println("회원가입 - 현재 날짜 : "+date);
+		String mbRegdate = date;
+		String mbUpddate = date;
+		mbPwd = passwordEncoder.encode(mbPwd);
+		System.out.println(mbId);
+		System.out.println(mbNm);
+		System.out.println(mbPwd);
+		System.out.println(mbRrno);
+		System.out.println(mbGender);
+		System.out.println(mbRegdate);
+		System.out.println(mbUpddate);
+		System.out.println(mbDelyn);
+		System.out.println("==========");
+		
+		
+		memberJpaRepo.save(
+			Member.builder()
+				.mbId(mbId)
+				.mbNm(mbNm)
+				.mbPwd(mbPwd)
+				.mbRrno(mbRrno)
+				.mbGender(mbGender)
+				.mbRegdate(mbRegdate)
+				.mbUpddate(mbUpddate)
+				.mbDelyn(mbDelyn)
+				.roles(Collections.singletonList("ROLE_USER"))
+				.build()
+		);
+		
+    	} catch (Exception e) {
+    		System.out.println(e);
+    	}
+    	return responseService.getSuccessResult();
+   }
 //return responseService.getSingleResult(memberJpaRepo.save(member));
 
 	

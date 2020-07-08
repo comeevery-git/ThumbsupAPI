@@ -1,4 +1,4 @@
-package com.boot.api.thumbsup.domains.Admin.domain;
+package com.boot.api.thumbsup.domains.admin.domain;
 
 public class AdminDto {
 

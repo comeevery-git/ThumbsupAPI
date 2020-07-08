@@ -1,4 +1,4 @@
-package com.boot.api.thumbsup.domains.Board.domain;
+package com.boot.api.thumbsup.domains.board.domain;
 
 import java.io.Serializable;
 

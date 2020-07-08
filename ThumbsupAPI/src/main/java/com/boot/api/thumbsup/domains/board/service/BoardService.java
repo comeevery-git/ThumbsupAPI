@@ -1,6 +1,6 @@
-package com.boot.api.thumbsup.domains.Board.service;
+package com.boot.api.thumbsup.domains.board.service;
 
-import com.boot.api.thumbsup.domains.Board.domain.BoardEntity;
+import com.boot.api.thumbsup.domains.board.domain.BoardEntity;
 
 public interface BoardService {
 	/*
