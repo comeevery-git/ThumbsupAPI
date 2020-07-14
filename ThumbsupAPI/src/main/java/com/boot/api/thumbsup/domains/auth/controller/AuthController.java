@@ -18,6 +18,8 @@ import com.boot.api.thumbsup.common.exception.CEmailSigninFailedException;
 import com.boot.api.thumbsup.common.model.CommonResult;
 import com.boot.api.thumbsup.common.model.SingleResult;
 import com.boot.api.thumbsup.common.service.ResponseService;
+import com.boot.api.thumbsup.domains.admin.domain.Admin;
+import com.boot.api.thumbsup.domains.admin.domain.AdminJpaRepo;
 import com.boot.api.thumbsup.domains.member.domain.Member;
 import com.boot.api.thumbsup.domains.member.domain.MemberJpaRepo;
 
@@ -33,6 +35,9 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 	@Autowired
 	private MemberJpaRepo memberJpaRepo;
+	@Autowired
+	private AdminJpaRepo adminJpaRepo;
+	
 	@Autowired
     private JwtTokenProvider jwtTokenProvider;
 	@Autowired
@@ -72,8 +77,7 @@ public class AuthController {
     	    @ApiParam(value = "회원이름", required = true) @RequestParam String mbNm,
     	    @ApiParam(value = "회원비밀번호", required = true) @RequestParam String mbPwd,
     	    @ApiParam(value = "회원생년월일", required = true) @RequestParam String mbRrno,
-    	    @ApiParam(value = "회원성별", required = true) @RequestParam String mbGender,
-    	    @ApiParam(value = "회원삭제여부", defaultValue= "N") @RequestParam String mbDelyn
+    	    @ApiParam(value = "회원성별", required = true) @RequestParam String mbGender
     		) {
     	try {
 		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
@@ -89,7 +93,6 @@ public class AuthController {
 		System.out.println(mbGender);
 		System.out.println(mbRegdate);
 		System.out.println(mbUpddate);
-		System.out.println(mbDelyn);
 		System.out.println("==========");
 		
 		
@@ -102,7 +105,6 @@ public class AuthController {
 				.mbGender(mbGender)
 				.mbRegdate(mbRegdate)
 				.mbUpddate(mbUpddate)
-				.mbDelyn(mbDelyn)
 				.roles(Collections.singletonList("ROLE_USER"))
 				.build()
 		);
@@ -120,19 +122,25 @@ public class AuthController {
     @ApiOperation(value = "직원 로그인", notes = "이메일 로그인을 한다.")
     @PostMapping(value = "/signin_m")
     public SingleResult<String> signin_m(
-    		@ApiParam(value = "ID : 이메일", required = true) @RequestParam String mbId,
-           @ApiParam(value = "비밀번호", required = true) @RequestParam String mbPwd
+    		@ApiParam(value = "ID : 이메일", required = true) @RequestParam String adminId,
+           @ApiParam(value = "비밀번호", required = true) @RequestParam String adminPwd
            ) {
     	try {
-	        Member member = memberJpaRepo.findByMbId(mbId).orElseThrow(CEmailSigninFailedException::new);
+	        Admin admin = adminJpaRepo.findByAdminId(adminId).orElseThrow(CEmailSigninFailedException::new);
 	        
-	        if (!passwordEncoder.matches(mbPwd, member.getPassword())) throw new CEmailSigninFailedException();
-	        return responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(member.getMbId()), member.getRoles()));
+	        if (!passwordEncoder.matches(adminPwd, admin.getPassword())) throw new CEmailSigninFailedException();
+	        
+	        
+	        //return responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(admin.getAdminId()), admin.getRoles()));
+	        SingleResult<String> tokenlist = responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(admin.getAdminId()), admin.getRoles()));
+	        System.out.println("@@@@@중요@@@@@@@@@@@@@@:"+tokenlist.getData()+"@@@@222222222@@@@"+tokenlist.getCode());
+	        System.out.println("@@@@@@@@@@@@@:"+admin.getAdminNm());
+	         
+	        return responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(admin.getAdminId()), admin.getRoles()));
 	        
     	} catch (Exception e) {
     		System.out.println(e);
     	}
-    	
     	return responseService.getSingleResult("LOGIN ERROR : 암호화 확인필요");
     }
     
@@ -142,42 +150,41 @@ public class AuthController {
     @ApiOperation(value = "직원가입", notes = "회원가입을 한다.")
     @PostMapping(value = "/signup_m")
     public CommonResult signup_m(
-    		@ApiParam(value = "회원아이디", required = true) @RequestParam String mbId,
-    	    @ApiParam(value = "회원이름", required = true) @RequestParam String mbNm,
-    	    @ApiParam(value = "회원비밀번호", required = true) @RequestParam String mbPwd,
-    	    @ApiParam(value = "회원생년월일", required = true) @RequestParam String mbRrno,
-    	    @ApiParam(value = "회원성별", required = true) @RequestParam String mbGender,
-    	    @ApiParam(value = "회원삭제여부", defaultValue= "N") @RequestParam String mbDelyn
+    		@ApiParam(value = "직원아이디", required = true) @RequestParam String adminId,
+    	    @ApiParam(value = "직원이름", required = true) @RequestParam String adminNm,
+    	    @ApiParam(value = "직원비밀번호", required = true) @RequestParam String adminPwd,
+    	    @ApiParam(value = "직원생년월일", required = true) @RequestParam String adminRrno,
+    	    @ApiParam(value = "직원전화번호", required = true) @RequestParam String adminTel,
+    	    @ApiParam(value = "직원부서", required = true) @RequestParam String adminDepart
     		) {
     	try {
+    		
 		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
 		String date = format.format (System.currentTimeMillis());
-		System.out.println("회원가입 - 현재 날짜 : "+date);
-		String mbRegdate = date;
-		String mbUpddate = date;
-		mbPwd = passwordEncoder.encode(mbPwd);
-		System.out.println(mbId);
-		System.out.println(mbNm);
-		System.out.println(mbPwd);
-		System.out.println(mbRrno);
-		System.out.println(mbGender);
-		System.out.println(mbRegdate);
-		System.out.println(mbUpddate);
-		System.out.println(mbDelyn);
+		System.out.println("직원가입 - 현재 날짜 : "+date);
+		String adminRegdate = date;
+		String adminUpddate = date;
+		adminPwd = passwordEncoder.encode(adminPwd);
+		System.out.println(adminId);
+		System.out.println(adminNm);
+		System.out.println(adminPwd);
+		System.out.println(adminRrno);
+		System.out.println(adminTel);
+		System.out.println(adminDepart);
 		System.out.println("==========");
 		
 		
-		memberJpaRepo.save(
-			Member.builder()
-				.mbId(mbId)
-				.mbNm(mbNm)
-				.mbPwd(mbPwd)
-				.mbRrno(mbRrno)
-				.mbGender(mbGender)
-				.mbRegdate(mbRegdate)
-				.mbUpddate(mbUpddate)
-				.mbDelyn(mbDelyn)
-				.roles(Collections.singletonList("ROLE_USER"))
+		adminJpaRepo.save(
+			Admin.builder()
+				.adminId(adminId)
+				.adminNm(adminNm)
+				.adminPwd(adminPwd)
+				.adminRrno(adminRrno)
+				.adminTel(adminTel)
+				.adminDepart(adminDepart)
+				.adminRegdate(adminRegdate)
+				.adminUpddate(adminUpddate)
+				.roles(Collections.singletonList("ROLE_ADMIN"))
 				.build()
 		);
 		

@@ -1,45 +1,42 @@
 package com.boot.api.thumbsup.domains.admin.domain;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Builder
 @Entity
+@Getter
+@NoArgsConstructor // 인자없는 생성자를 자동으로 생성합니다.
+@AllArgsConstructor
 @Table(name = "tb_admin")
-public class Admin {
- 
-	public Admin() {}
-	
-	public Admin(Long admin_idx, String adminType, String adminDepart, String adminRank, String adminId,
-			String adminPwd, String adminNm, String adminTel, String adminRrno, String adminGender, Integer adminImg,
-			String adminUseyn, String adminDelyn, String adminRegdate, String adminUpddate, String adminGrant,
-			String adminAccessdate, String adminToken) {
-		super();
-		this.admin_idx = admin_idx;
-		this.adminType = adminType;
-		this.adminDepart = adminDepart;
-		this.adminRank = adminRank;
-		this.adminId = adminId;
-		this.adminPwd = adminPwd;
-		this.adminNm = adminNm;
-		this.adminTel = adminTel;
-		this.adminRrno = adminRrno;
-		this.adminGender = adminGender;
-		this.adminImg = adminImg;
-		this.adminUseyn = adminUseyn;
-		this.adminDelyn = adminDelyn;
-		this.adminRegdate = adminRegdate;
-		this.adminUpddate = adminUpddate;
-		this.adminGrant = adminGrant;
-		this.adminAccessdate = adminAccessdate;
-		this.adminToken = adminToken;
-		
-	}
+public class Admin implements UserDetails {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column
@@ -100,10 +97,6 @@ public class Admin {
     // 수정일 
     private String adminUpddate;
 
-    // 권한 
-    @Column(length = 100)
-    private String adminGrant;
-    
     // 마지막 접속일 
     private String adminAccessdate;
 
@@ -230,14 +223,6 @@ public class Admin {
 		this.adminUpddate = adminUpddate;
 	}
 
-	public String getAdminGrant() {
-		return adminGrant;
-	}
-
-	public void setAdminGrant(String adminGrant) {
-		this.adminGrant = adminGrant;
-	}
-	
 	public String getAdminAccessdate() {
 		return adminAccessdate;
 	}
@@ -254,20 +239,49 @@ public class Admin {
 		this.adminToken = adminToken;
 	}
 
-	@Override
-	public String toString() {
-		return "AdminEntity [admin_idx=" + admin_idx + ", adminType=" + adminType + ", adminDepart=" + adminDepart
-				+ ", adminRank=" + adminRank + ", adminId=" + adminId + ", adminPwd=" + adminPwd + ", adminNm="
-				+ adminNm + ", adminTel=" + adminTel + ", adminRrno=" + adminRrno + ", adminGender=" + adminGender
-				+ ", adminImg=" + adminImg + ", adminUseyn=" + adminUseyn + ", adminDelyn=" + adminDelyn
-				+ ", adminRegdate=" + adminRegdate + ", adminUpddate=" + adminUpddate + ", adminGrant=" + adminGrant
-				+ ", adminAccessdate=" + adminAccessdate
-				+ ", adminToken=" + adminToken
-				+ "]";
-	}
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+    
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    }
+    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Override
+    public String getUsername() {
+        return this.adminId;
+    }
+    
+    @Override
+    public String getPassword () {
+        return this.adminPwd;
+    }
+    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
-    
-    
-    
     
 }

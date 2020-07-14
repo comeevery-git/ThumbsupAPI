@@ -38,7 +38,7 @@ spring:
         #디버깅이 용이하도록 SQL문 이외에 추가적인 정보를 출력해 준다.
         use_sql_comments: true
         #auto
-        ddl-auto: update
+        ddl-auto: create-drop
 
   mvc: #JSP 설정
     static-path-pattern: /resources/**
