@@ -20,6 +20,7 @@ import com.boot.api.thumbsup.common.model.SingleResult;
 import com.boot.api.thumbsup.common.service.ResponseService;
 import com.boot.api.thumbsup.domains.admin.domain.Admin;
 import com.boot.api.thumbsup.domains.admin.domain.AdminJpaRepo;
+import com.boot.api.thumbsup.domains.auth.domain.RSPAUTH001;
 import com.boot.api.thumbsup.domains.member.domain.Member;
 import com.boot.api.thumbsup.domains.member.domain.MemberJpaRepo;
 
@@ -105,7 +106,7 @@ public class AuthController {
 				.mbGender(mbGender)
 				.mbRegdate(mbRegdate)
 				.mbUpddate(mbUpddate)
-				.roles(Collections.singletonList("ROLE_USER"))
+				.roles(Collections.singletonList("ROLE_MEMBER"))
 				.build()
 		);
 		
@@ -121,27 +122,44 @@ public class AuthController {
 	 */
     @ApiOperation(value = "직원 로그인", notes = "이메일 로그인을 한다.")
     @PostMapping(value = "/signin_m")
-    public SingleResult<String> signin_m(
+    public RSPAUTH001 signin_m(
+    		RSPAUTH001 req,
     		@ApiParam(value = "ID : 이메일", required = true) @RequestParam String adminId,
-           @ApiParam(value = "비밀번호", required = true) @RequestParam String adminPwd
+            @ApiParam(value = "비밀번호", required = true) @RequestParam String adminPwd
            ) {
+    	
     	try {
+    		//해당유저 확인
 	        Admin admin = adminJpaRepo.findByAdminId(adminId).orElseThrow(CEmailSigninFailedException::new);
 	        
+	        //암호확인
 	        if (!passwordEncoder.matches(adminPwd, admin.getPassword())) throw new CEmailSigninFailedException();
 	        
+	        //권한확인
+	        //String role = adminJpaRepo.selectAdminRole(admin.getAdmin_idx());
 	        
+	        //jwt 토큰생성
 	        //return responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(admin.getAdminId()), admin.getRoles()));
-	        SingleResult<String> tokenlist = responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(admin.getAdminId()), admin.getRoles()));
-	        System.out.println("@@@@@중요@@@@@@@@@@@@@@:"+tokenlist.getData()+"@@@@222222222@@@@"+tokenlist.getCode());
-	        System.out.println("@@@@@@@@@@@@@:"+admin.getAdminNm());
-	         
-	        return responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(admin.getAdminId()), admin.getRoles()));
+	        String adminToken = jwtTokenProvider.createToken(String.valueOf(admin.getAdminId()), admin.getRoles());
+	        String adminRole = admin.getRoles().toString();
+	        
+	        //응답보낼 데이터 세팅
+	        req.setAdmin_idx(admin.getAdmin_idx());
+	        req.setAdminId(admin.getAdminId());
+	        req.setAdminNm(admin.getAdminNm());
+	        req.setAdminUseyn(admin.getAdminUseyn());
+	        req.setAdminToken(adminToken);
+	        req.setAdminRole(adminRole);
+	        
+	        System.out.println(" :::::::::::::::::::::::::::::::::: " +req.getAdminToken()); 
+	        
+	        return req;
 	        
     	} catch (Exception e) {
     		System.out.println(e);
     	}
-    	return responseService.getSingleResult("LOGIN ERROR : 암호화 확인필요");
+    	//return responseService.getSingleResult("LOGIN ERROR : 암호화 확인필요");
+    	return req;
     }
     
 	/*
