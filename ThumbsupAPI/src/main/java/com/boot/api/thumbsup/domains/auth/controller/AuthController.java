@@ -21,6 +21,7 @@ import com.boot.api.thumbsup.common.service.ResponseService;
 import com.boot.api.thumbsup.domains.admin.domain.Admin;
 import com.boot.api.thumbsup.domains.admin.domain.AdminJpaRepo;
 import com.boot.api.thumbsup.domains.auth.domain.RSPAUTH001;
+import com.boot.api.thumbsup.domains.auth.domain.RSPAUTH002;
 import com.boot.api.thumbsup.domains.member.domain.Member;
 import com.boot.api.thumbsup.domains.member.domain.MemberJpaRepo;
 
@@ -150,13 +151,16 @@ public class AuthController {
 	        req.setAdminUseyn(admin.getAdminUseyn());
 	        req.setAdminToken(adminToken);
 	        req.setAdminRole(adminRole);
-	        
+	        req.setSuccess("success");
+    		
 	        System.out.println(" :::::::::::::::::::::::::::::::::: " +req.getAdminToken()); 
 	        
 	        return req;
 	        
     	} catch (Exception e) {
     		System.out.println(e);
+    		req.setSuccess("fail");
+    		req.setMsg("api server error");
     	}
     	//return responseService.getSingleResult("LOGIN ERROR : 암호화 확인필요");
     	return req;
@@ -167,49 +171,54 @@ public class AuthController {
 	 */
     @ApiOperation(value = "직원가입", notes = "회원가입을 한다.")
     @PostMapping(value = "/signup_m")
-    public CommonResult signup_m(
+    public RSPAUTH002 signup_m(
     		@ApiParam(value = "직원아이디", required = true) @RequestParam String adminId,
     	    @ApiParam(value = "직원이름", required = true) @RequestParam String adminNm,
     	    @ApiParam(value = "직원비밀번호", required = true) @RequestParam String adminPwd,
     	    @ApiParam(value = "직원생년월일", required = true) @RequestParam String adminRrno,
     	    @ApiParam(value = "직원전화번호", required = true) @RequestParam String adminTel,
-    	    @ApiParam(value = "직원부서", required = true) @RequestParam String adminDepart
+    	    @ApiParam(value = "직원부서", required = true) @RequestParam String adminDepart,
+    	    RSPAUTH002 req
     		) {
     	try {
     		
-		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
-		String date = format.format (System.currentTimeMillis());
-		System.out.println("직원가입 - 현재 날짜 : "+date);
-		String adminRegdate = date;
-		String adminUpddate = date;
-		adminPwd = passwordEncoder.encode(adminPwd);
-		System.out.println(adminId);
-		System.out.println(adminNm);
-		System.out.println(adminPwd);
-		System.out.println(adminRrno);
-		System.out.println(adminTel);
-		System.out.println(adminDepart);
-		System.out.println("==========");
-		
-		
-		adminJpaRepo.save(
-			Admin.builder()
-				.adminId(adminId)
-				.adminNm(adminNm)
-				.adminPwd(adminPwd)
-				.adminRrno(adminRrno)
-				.adminTel(adminTel)
-				.adminDepart(adminDepart)
-				.adminRegdate(adminRegdate)
-				.adminUpddate(adminUpddate)
-				.roles(Collections.singletonList("ROLE_ADMIN"))
-				.build()
-		);
+			SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+			String date = format.format (System.currentTimeMillis());
+			System.out.println("직원가입 - 현재 날짜 : "+date);
+			String adminRegdate = date;
+			String adminUpddate = date;
+			adminPwd = passwordEncoder.encode(adminPwd);
+			System.out.println(adminId);
+			System.out.println(adminNm);
+			System.out.println(adminPwd);
+			System.out.println(adminRrno);
+			System.out.println(adminTel);
+			System.out.println(adminDepart);
+			System.out.println("==========");
+			
+			adminJpaRepo.save(
+				Admin.builder()
+					.adminId(adminId)
+					.adminNm(adminNm)
+					.adminPwd(adminPwd)
+					.adminRrno(adminRrno)
+					.adminTel(adminTel)
+					.adminDepart(adminDepart)
+					.adminRegdate(adminRegdate)
+					.adminUpddate(adminUpddate)
+					.roles(Collections.singletonList("ROLE_ADMIN"))
+					.build()
+				);
+			
+			req.setSuccess("success");
 		
     	} catch (Exception e) {
     		System.out.println(e);
+    		req.setSuccess("fail");
+    		req.setMsg("api server error");
     	}
-    	return responseService.getSuccessResult();
+    	//return responseService.getSuccessResult();
+    	return req;
    }
 //return responseService.getSingleResult(memberJpaRepo.save(member));
 
