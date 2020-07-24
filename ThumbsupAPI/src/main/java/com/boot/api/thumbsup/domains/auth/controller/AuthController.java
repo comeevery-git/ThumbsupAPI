@@ -22,6 +22,7 @@ import com.boot.api.thumbsup.domains.admin.domain.Admin;
 import com.boot.api.thumbsup.domains.admin.domain.AdminJpaRepo;
 import com.boot.api.thumbsup.domains.auth.domain.RSPAUTH001;
 import com.boot.api.thumbsup.domains.auth.domain.RSPAUTH002;
+import com.boot.api.thumbsup.domains.auth.domain.RSPAUTH003;
 import com.boot.api.thumbsup.domains.member.domain.Member;
 import com.boot.api.thumbsup.domains.member.domain.MemberJpaRepo;
 
@@ -52,21 +53,42 @@ public class AuthController {
 	 */
     @ApiOperation(value = "로그인", notes = "이메일 로그인을 한다.")
     @PostMapping(value = "/signin")
-    public SingleResult<String> signin(
+    public RSPAUTH003 signin(
+    		RSPAUTH003 req,
     		@ApiParam(value = "ID : 이메일", required = true) @RequestParam String mbId,
-           @ApiParam(value = "비밀번호", required = true) @RequestParam String mbPwd
+    		@ApiParam(value = "비밀번호", required = true) @RequestParam String mbPwd
            ) {
     	try {
+    		//해당 유저 확인
 	        Member member = memberJpaRepo.findByMbId(mbId).orElseThrow(CEmailSigninFailedException::new);
-	        
 	        if (!passwordEncoder.matches(mbPwd, member.getPassword())) throw new CEmailSigninFailedException();
-	        return responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(member.getMbId()), member.getRoles()));
+	        
+	        //토큰 생성
+	        String memberToken = jwtTokenProvider.createToken(String.valueOf(member.getMbId()), member.getRoles());
+	        String memberRole = member.getRoles().toString();
+	        
+	        //응답보낼 데이터 세팅
+	        req.setMbIdx(member.getMbIdx());
+	        req.setMbId(member.getMbId());
+	        req.setMbNm(member.getMbNm());
+	        req.setMbTel(member.getMbTel());
+	        req.setMemberToken(memberToken);
+	        req.setMemberRole(memberRole);
+	        req.setSuccess("success");
+    		
+	        System.out.println(" :::::::::::::::::::::::::::::::::: " +req.getMemberToken()); 
+	        
+	        return req;
 	        
     	} catch (Exception e) {
     		System.out.println(e);
+    		req.setSuccess("fail");
+    		req.setMsg("api server error");
     	}
     	
-    	return responseService.getSingleResult("LOGIN ERROR : 암호화 확인필요");
+    	return req;
+	        //return responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(member.getMbId()), member.getRoles()));
+    		//return responseService.getSingleResult("LOGIN ERROR : 암호화 확인필요");
     }
     
 	/*
@@ -74,7 +96,8 @@ public class AuthController {
 	 */
     @ApiOperation(value = "가입", notes = "회원가입을 한다.")
     @PostMapping(value = "/signup")
-    public CommonResult signup(
+    public RSPAUTH002 signup(
+    		RSPAUTH002 req,
     		@ApiParam(value = "회원아이디", required = true) @RequestParam String mbId,
     	    @ApiParam(value = "회원이름", required = true) @RequestParam String mbNm,
     	    @ApiParam(value = "회원비밀번호", required = true) @RequestParam String mbPwd,
@@ -82,39 +105,46 @@ public class AuthController {
     	    @ApiParam(value = "회원성별", required = true) @RequestParam String mbGender
     		) {
     	try {
-		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
-		String date = format.format (System.currentTimeMillis());
-		System.out.println("회원가입 - 현재 날짜 : "+date);
-		String mbRegdate = date;
-		String mbUpddate = date;
-		mbPwd = passwordEncoder.encode(mbPwd);
-		System.out.println(mbId);
-		System.out.println(mbNm);
-		System.out.println(mbPwd);
-		System.out.println(mbRrno);
-		System.out.println(mbGender);
-		System.out.println(mbRegdate);
-		System.out.println(mbUpddate);
-		System.out.println("==========");
-		
-		
-		memberJpaRepo.save(
-			Member.builder()
-				.mbId(mbId)
-				.mbNm(mbNm)
-				.mbPwd(mbPwd)
-				.mbRrno(mbRrno)
-				.mbGender(mbGender)
-				.mbRegdate(mbRegdate)
-				.mbUpddate(mbUpddate)
-				.roles(Collections.singletonList("ROLE_MEMBER"))
-				.build()
-		);
+			SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+			String date = format.format (System.currentTimeMillis());
+			System.out.println("회원가입 - 현재 날짜 : "+date);
+			String mbRegdate = date;
+			String mbUpddate = date;
+			String mbDelyn = "N";
+			mbPwd = passwordEncoder.encode(mbPwd);
+			System.out.println(mbId);
+			System.out.println(mbNm);
+			System.out.println(mbPwd);
+			System.out.println(mbRrno);
+			System.out.println(mbGender);
+			System.out.println(mbRegdate);
+			System.out.println(mbUpddate);
+			System.out.println("==========");
+			
+			
+			memberJpaRepo.save(
+				Member.builder()
+					.mbId(mbId)
+					.mbNm(mbNm)
+					.mbPwd(mbPwd)
+					.mbRrno(mbRrno)
+					.mbGender(mbGender)
+					.mbRegdate(mbRegdate)
+					.mbUpddate(mbUpddate)
+					.mbDelyn(mbDelyn)
+					.roles(Collections.singletonList("ROLE_MEMBER"))
+					.build()
+			);
+			req.setSuccess("success");
+			return req;
 		
     	} catch (Exception e) {
     		System.out.println(e);
+    		req.setSuccess("fail");
+    		req.setMsg("api server error");
     	}
-    	return responseService.getSuccessResult();
+    	//return responseService.getSuccessResult();
+    	return req;
    }
 
     

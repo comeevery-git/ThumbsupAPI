@@ -1,5 +1,7 @@
 package com.boot.api.thumbsup.domains.auth.domain;
 
+import com.boot.api.thumbsup.domains.auth.domain.RqsInterData;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,8 +18,7 @@ public class RSPHM001 implements RqsInterData{
 	// 결과msg
 	private String msg;
 
-    // token
-    private String adminToken;
+
     
     
 }

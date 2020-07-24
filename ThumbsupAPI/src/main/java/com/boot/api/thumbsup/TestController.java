@@ -7,16 +7,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.boot.api.thumbsup.domains.board.domain.BoardEntity;
-import com.boot.api.thumbsup.domains.board.domain.BoardRepository;
-import com.boot.api.thumbsup.domains.board.service.BoardService;
+import com.boot.api.thumbsup.domains.service.domain.Board;
+import com.boot.api.thumbsup.domains.service.domain.BoardJpaRepo;
+import com.boot.api.thumbsup.domains.service.service.BoardService;
 
 @Controller
 public class TestController {
 	@Autowired
 	public BoardService boardService;
 	@Autowired
-	public BoardRepository boardRepository;
+	public BoardJpaRepo boardJpaRepo;
 	
     @GetMapping("/test")
     public String test(Model model) {
@@ -29,23 +29,23 @@ public class TestController {
     @GetMapping("/index")
     public String index(
     		Model model) {
-    	boardRepository.deleteAll();
-    	boardService.save(new BoardEntity("Ramesh", "Fadatare", "ramesh@gmail.com"));
-    	boardService.save(new BoardEntity("Tom", "Cruise", "tom@gmail.com"));
-    	boardService.save(new BoardEntity("John", "Cena", "john@gmail.com"));
-    	boardService.save(new BoardEntity("tony", "stark", "stark@gmail.com"));
+    	boardJpaRepo.deleteAll();
+    	boardService.save(new Board(0, "Ramesh", "Fadatare", "ramesh@gmail.com"));
+    	boardService.save(new Board(0, "Tom", "Cruise", "tom@gmail.com"));
+    	boardService.save(new Board(0, "John", "Cena", "john@gmail.com"));
+    	boardService.save(new Board(0, "tony", "stark", "stark@gmail.com"));
 
 
         //List <BoardEntity> boards = boardService.findAll();
         //boards.forEach(employee -> System.out.println(employee.toString()));
         
-    	Iterable <BoardEntity> boardList = boardRepository.findAll();
+    	Iterable <Board> boardList = boardJpaRepo.findAll();
     			
-			for(BoardEntity i : boardList ){
+			for(Board i : boardList ){
 				System.out.println(i.toString());
 			}
 
-        model.addAttribute("board_list",boardRepository.findAll());
+        model.addAttribute("board_list",boardJpaRepo.findAll());
     	model.addAttribute("test","test");
     	return "index";
     }

@@ -1,6 +1,6 @@
-package com.boot.api.thumbsup.domains.board.service;
+package com.boot.api.thumbsup.domains.service.service;
 
-import com.boot.api.thumbsup.domains.board.domain.BoardEntity;
+import com.boot.api.thumbsup.domains.service.domain.Board;
 
 public interface BoardService {
 	/*
@@ -14,7 +14,7 @@ public interface BoardService {
 	
 	 //List <BoardEntity> findAll();
 
-	 void save(BoardEntity boards);
+	 void save(Board boards);
 
 	    //Optional < BoardEntity > findById(Long id);
 

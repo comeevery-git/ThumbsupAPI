@@ -1,4 +1,4 @@
-package com.boot.api.thumbsup.domains.board.domain;
+package com.boot.api.thumbsup.domains.service.domain;
 
 import java.io.Serializable;
 
@@ -9,28 +9,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor // 인자없는 생성자를 자동으로 생성합니다.
+@AllArgsConstructor
 @Table(name = "tb_board")
-public class BoardEntity implements Serializable {
-	
-	//기본 생성자 필수
-	private BoardEntity(){}
- 
-	public BoardEntity(String board_title, String board_contents, String board_admin) {
-		this.board_title = board_title;
-		this.board_contents = board_contents;
-		this.board_admin = board_admin;
-	}
+public class Board implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long board_idx;
+	private int board_idx;
 	
 	@Column(length = 100)
 	private String board_title;
@@ -41,11 +39,11 @@ public class BoardEntity implements Serializable {
 	@Column(length = 100)
 	private String board_admin;
 
-	public Long getBoard_idx() {
+	public int getBoard_idx() {
 		return board_idx;
 	}
 
-	public void setBoard_idx(Long board_idx) {
+	public void setBoard_idx(int board_idx) {
 		this.board_idx = board_idx;
 	}
 

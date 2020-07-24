@@ -1,24 +1,24 @@
-package com.boot.api.thumbsup.domains.board.service;
+package com.boot.api.thumbsup.domains.service.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boot.api.thumbsup.domains.board.domain.BoardEntity;
-import com.boot.api.thumbsup.domains.board.domain.BoardRepository;
+import com.boot.api.thumbsup.domains.service.domain.Board;
+import com.boot.api.thumbsup.domains.service.domain.BoardJpaRepo;
 
 @Service
 public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
-	private BoardRepository boardRepository;
+	private BoardJpaRepo boardJpaRepo;
 
 	/*
 	 * @Override public List <BoardEntity> findAll() { return
 	 * boardRepository.findAll(); }
 	 */
 	@Override
-	public void save(BoardEntity boards) {
-		boardRepository.save(boards);
+	public void save(Board boards) {
+		boardJpaRepo.save(boards);
 	}
 	
 /*
